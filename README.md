@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cattle & Buffalo Image Classifier
 
 Image-based Animal Type Classification for cattle and buffaloes.
@@ -35,3 +36,6 @@ This project provides a Python-based image classification pipeline to distinguis
 ## Notes
 - The default model uses a torchvision ResNet18 with randomly initialized weights (no internet required). You can switch to pretrained weights if your environment allows downloads.
 - You can extend transforms, augmentations, and model architectures as needed.
+=======
+# cattle-buffalo-image-classifier
+>>>>>>> c34086bf95da42b93c1efd299eacbb5681b78996
