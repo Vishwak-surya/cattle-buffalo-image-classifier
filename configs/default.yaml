@@ -1,0 +1,31 @@
+project_name: cattle-buffalo-image-classifier
+seed: 42
+
+data:
+  train_csv: data/processed/train.csv
+  val_csv: data/processed/val.csv
+  image_root: data/processed/images
+  num_classes: 2  # cattle vs buffalo
+  traits: [body_length, height_withers, chest_width, rump_angle]
+
+model:
+  backbone: resnet50
+  pretrained: true
+  classification_head: true
+  regression_traits: [body_length, height_withers, chest_width, rump_angle]
+
+train:
+  batch_size: 16
+  num_epochs: 10
+  lr: 0.0003
+  weight_decay: 0.0001
+  num_workers: 4
+  device: cuda
+  output_dir: outputs
+
+inference:
+  checkpoint_path: models/best.pt
+
+api:
+  host: 0.0.0.0
+  port: 8000

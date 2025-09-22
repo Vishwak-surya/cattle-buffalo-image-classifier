@@ -1,0 +1,19 @@
+# Core ML stack
+torch
+torchvision
+
+# Data & utilities
+numpy
+pandas
+pillow
+scikit-learn
+opencv-python
+albumentations
+
+# Training & visualization
+tqdm
+matplotlib
+
+# Dev & testing
+pytest
+jupyter
