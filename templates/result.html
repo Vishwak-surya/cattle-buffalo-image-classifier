@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Classification Results
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Image Display -->
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h5>Uploaded Image</h5>
+                            <div class="image-container">
+                                <img src="data:image/jpeg;base64,{{ image_data }}" 
+                                     class="img-fluid rounded shadow" 
+                                     alt="Uploaded image"
+                                     style="max-height: 400px; max-width: 100%;">
+                            </div>
+                            <small class="text-muted">{{ filename }}</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Display -->
+                    <div class="col-md-6">
+                        {% if result.error %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Error:</strong> {{ result.error }}
+                            </div>
+                        {% else %}
+                            <div class="text-center">
+                                <h4 class="mb-4">Prediction Results</h4>
+                                
+                                <!-- Species Classification -->
+                                {% if result.species %}
+                                    <div class="prediction-result mb-4">
+                                        <div class="species-icon mb-3">
+                                            {% if result.species == 'Buffalo' %}
+                                                <i class="fas fa-hippo fa-4x text-success"></i>
+                                            {% else %}
+                                                <i class="fas fa-cow fa-4x text-primary"></i>
+                                            {% endif %}
+                                        </div>
+                                        <h2 class="species-name {% if result.species == 'Buffalo' %}text-success{% else %}text-primary{% endif %}">
+                                            {{ result.species }}
+                                        </h2>
+                                        <div class="confidence-score">
+                                            <span class="badge bg-info fs-6">
+                                                Confidence: {{ "%.1f" | format(result.confidence * 100) }}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Probability Breakdown -->
+                                    {% if result.probabilities %}
+                                        <div class="probability-breakdown">
+                                            <h6 class="text-muted mb-3">Probability Breakdown</h6>
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span><i class="fas fa-cow text-primary"></i> Cattle:</span>
+                                                    <span class="fw-bold">{{ "%.1f" | format(result.probabilities.cattle * 100) }}%</span>
+                                                </div>
+                                                <div class="progress mb-2" style="height: 8px;">
+                                                    <div class="progress-bar bg-primary" 
+                                                         style="width: {{ result.probabilities.cattle * 100 }}%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span><i class="fas fa-hippo text-success"></i> Buffalo:</span>
+                                                    <span class="fw-bold">{{ "%.1f" | format(result.probabilities.buffalo * 100) }}%</span>
+                                                </div>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-success" 
+                                                         style="width: {{ result.probabilities.buffalo * 100 }}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <!-- Traits (if available) -->
+                                {% if result.traits %}
+                                    <div class="traits-section mt-4">
+                                        <h6 class="text-muted">Additional Traits</h6>
+                                        <div class="traits-values">
+                                            {% for trait in result.traits %}
+                                                <span class="badge bg-secondary me-1">{{ "%.2f" | format(trait) }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>
+                        Upload Another Image
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.prediction-result {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.species-name {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.confidence-score {
+    margin-top: 10px;
+}
+
+.probability-breakdown {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.image-container {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.traits-section {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.traits-values .badge {
+    font-size: 0.8em;
+}
+</style>
+{% endblock %}

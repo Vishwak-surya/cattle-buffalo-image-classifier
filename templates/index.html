@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-upload me-2"></i>
+                    Upload an Image
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Upload an image of cattle or buffalo, and our AI model will classify it for you.
+                    The model will determine whether the image shows cattle or buffalo and provide confidence scores.
+                </p>
+                
+                <form method="POST" action="{{ url_for('predict') }}" enctype="multipart/form-data" class="mt-4">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Choose Image File</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".png,.jpg,.jpeg,.gif" required>
+                        <div class="form-text">Supported formats: PNG, JPG, JPEG, GIF (Max size: 16MB)</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>
+                            Classify Image
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cow fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Cattle</h5>
+                        <p class="card-text">Domestic cattle (Bos taurus) are the most widespread species of the genus Bos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-hippo fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Buffalo</h5>
+                        <p class="card-text">Buffalo are large bovid animals, including water buffalo and African buffalo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.btn-primary {
+    border-radius: 25px;
+    padding: 12px 30px;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('file').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Validate file size
+        if (file.size > 16 * 1024 * 1024) {
+            alert('File size must be less than 16MB');
+            e.target.value = '';
+            return;
+        }
+        
+        // Show file preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // You could add a preview here if needed
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+{% endblock %}
